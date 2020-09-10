@@ -27,7 +27,28 @@ Download and install instructions can be found at: http://eigen.tuxfamily.org. *
 ### OpenCV
 Download and install instructions can be found at: http://opencv.org. **Required at leat 2.4.3**. **Tested with 2.4.11 and 3.3.1**.
 
-## 2. Build and Run
+## 2. Docker support
+Clone this repository. Then, build the Docker image:
+```
+make image
+```
+Run the following command to open a shell in a docker container:
+```
+make shell
+```
+Run the method in this shell. For example:
+```
+roslaunch rvio rosario.launch
+```
+Open a new terminal and run `rosbag play` and, optionally, `rviz`.
+```
+rosbag play --pause <ROSBAG_PATH> /stereo/left/image_raw/:=/camera/image_raw
+```
+```
+rviz -d config/rvio_rviz.rviz
+```
+
+## 3. Build and Run
 First, `git clone` the repository and `catkin_make` it. Then, to run `rvio` with single camera/IMU inputs from the ROS topics `/camera/image_raw` and `/imu`, a config file in *config* folder and the corresponding launch file in *launch* folder (for example, `rvio_euroc.yaml` and `euroc.launch` are for [EuRoC](https://projects.asl.ethz.ch/datasets/doku.php?id=kmavvisualinertialdatasets) dataset) are needed, and to visualize the outputs of R-VIO please use `rviz` with the settings file `rvio_rviz.rviz` in *config* folder.
   ```
   Terminal 1: roscore
@@ -43,7 +64,7 @@ First, `git clone` the repository and `catkin_make` it. Then, to run `rvio` with
   ```
 You can also run R-VIO with your own sensor (data) by creating a config file `rvio_NAME_OF_YOUR_DATA.yaml` in *config* folder and the corresponding launch file `NAME_OF_YOUR_DATA.launch` in *launch* folder referring to the above EuRoC example.
 
-## 3. License
+## 4. License
 
 The source code is released under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) license.
 
