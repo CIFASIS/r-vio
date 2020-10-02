@@ -42,7 +42,7 @@ roslaunch rvio rosario.launch
 ```
 Open a new terminal and run `rosbag play` and, optionally, `rviz`.
 ```
-rosbag play --pause <ROSBAG_PATH> /stereo/left/image_raw/:=/camera/image_raw
+rosbag play --pause <ROSBAG_PATH>
 ```
 ```
 rviz -d config/rvio_rviz.rviz

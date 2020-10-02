@@ -6,6 +6,7 @@
 
     <!-- Our launch details -->
     <node name="rvio" pkg="rvio" type="rvio_mono" args="$(arg config)" output="screen">
+	 <remap from="/camera/image_raw" to="/stereo/left/image_raw"/>
     </node>
 
 </launch>
