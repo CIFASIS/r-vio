@@ -92,6 +92,8 @@ private:
     PreIntegrator* mpPreIntegrator;
     SensorDatabase* mpSensorDatabase;
 
+    ros::Publisher mPosePub;
+
     // Interact with rviz
     ros::NodeHandle mSystemNode;
     ros::Publisher mPathPub;

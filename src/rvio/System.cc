@@ -93,6 +93,7 @@ System::System(const std::string& strSettingsFile)
     mpSensorDatabase = new SensorDatabase();
 
     mPathPub = mSystemNode.advertise<nav_msgs::Path>("/rvio/trajectory", 1);
+    mPosePub = mSystemNode.advertise<geometry_msgs::PoseStamped>("/rvio/posestamped", 1);
 }
 
 
@@ -406,10 +407,11 @@ void System::MonoVIO(const cv::Mat& im, const double& timestamp)
     pose.pose.orientation.y = qkG(1);
     pose.pose.orientation.z = qkG(2);
     pose.pose.orientation.w = qkG(3);
-
+    pose.header.stamp = ros::Time(timestamp);
     path.header.frame_id = "world";
     path.poses.push_back(pose);
 
+    mPosePub.publish(pose);
     mPathPub.publish(path);
 
     usleep(1000);
