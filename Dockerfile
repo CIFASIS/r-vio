@@ -1,19 +1,10 @@
 FROM ros:kinetic-perception
 
-ENV CATKIN_WS=/root/catkin_ws
+ENV CATKIN_WS=/root/catkin_ws RVIO_ROOT=/root/catkin_ws/src/r-vio
 
-#RUN apt-get update && apt-get install -y \
-#      libsuitesparse-dev \
-#      ros-kinetic-tf-conversions \
-#      ros-kinetic-random-numbers && \
-#    rm -rf /var/lib/apt/lists/*
+COPY ./ $RVIO_ROOT
 
-
-COPY ./ $CATKIN_WS/src/R-VIO
-
+# Build r-vio
 WORKDIR $CATKIN_WS
-
-RUN /bin/bash -c '. /opt/ros/kinetic/setup.bash; catkin_make --pkg rvio --cmake-args -DCMAKE_BUILD_TYPE=Release' && \
-    sed -i '/exec "$@"/i \
-           source "/root/catkin_ws/devel/setup.bash"' /ros_entrypoint.sh
-
+COPY ./scripts/ $CATKIN_WS
+RUN ["/bin/bash", "-c", "chmod +x build.sh && ./build.sh && chmod +x modify_entrypoint.sh && ./modify_entrypoint.sh"]
