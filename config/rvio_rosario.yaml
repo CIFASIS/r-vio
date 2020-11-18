@@ -87,7 +87,7 @@ Tracker.nQualLvl: 0.01
 Tracker.nGridSize: 100
 
 # Use histogram equalizer or not
-Tracker.EnableEqualizer: 1
+Tracker.EnableEqualizer: 0
 
 # Use Sampson error or not (RANSAC)
 Tracker.UseSampson: 1
@@ -107,7 +107,7 @@ INI.nThresholdDispl: 0.01
 INI.EnableAlignment: 1
 
 # Record the outputs or not
-INI.RecordOutputs: 1
+INI.RecordOutputs: 0
 
 #--------------------------------------------------------------------------------------------
 # Display Parameters (tunable).
