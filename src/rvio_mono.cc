@@ -32,11 +32,29 @@
 class ImageGrabber
 {
 public:
-    ImageGrabber(RVIO::System* pSys) : mpSys(pSys) {}
+    ImageGrabber(RVIO::System* pSys) : mpSys(pSys) {
+#ifdef SAVE_TIMES
+        num_tracked_frames_ = 0;
+        f_track_times_.open("tracking_times_start.txt");
+        f_track_times_ << std::fixed;
+        f_track_times_ << std::setprecision(6);
+#endif
+    }
 
+    ~ImageGrabber() {
+#ifdef SAVE_TIMES
+        f_track_times_.close();
+#endif
+    }
     void GrabImage(const sensor_msgs::ImageConstPtr& msg);
 
     RVIO::System* mpSys;
+
+#ifdef SAVE_TIMES
+    int num_tracked_frames_;
+    std::ofstream f_track_times_;
+#endif
+
 };
 
 
@@ -55,7 +73,14 @@ void ImageGrabber::GrabImage(const sensor_msgs::ImageConstPtr& msg)
 {
     static int lastseq = -1;
     if ((int)msg->header.seq!=lastseq+1 && lastseq!=-1)
-        ROS_DEBUG("Image message drop! curr seq: %d expected seq: %d.", msg->header.seq, lastseq+1);
+        ROS_INFO("Image message drop! curr seq: %d expected seq: %d.", msg->header.seq, lastseq+1);
+
+#ifdef SAVE_TIMES
+    num_tracked_frames_++;
+    auto const t = std::chrono::system_clock::now().time_since_epoch().count();
+    f_track_times_ << num_tracked_frames_ << " " << t / 1e09 << std::endl;
+#endif
+
     lastseq = msg->header.seq;
 
     cv_bridge::CvImageConstPtr cv_ptr;

@@ -36,6 +36,10 @@
 #include "PreIntegrator.h"
 #include "SensorDatabase.h"
 
+#ifdef SAVE_TIMES
+#include <fstream>
+#endif
+
 
 namespace RVIO
 {
@@ -98,6 +102,12 @@ private:
     ros::NodeHandle mSystemNode;
     ros::Publisher mPathPub;
     tf::TransformBroadcaster mTfPub;
+
+#ifdef SAVE_TIMES
+    int num_tracked_frames_;
+    std::ofstream f_track_times_;
+#endif
+
 };
 
 } // namespace RVIO

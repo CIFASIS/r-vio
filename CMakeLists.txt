@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
 project(rvio)
 
+option(SAVE_TIMES "Enable option to save tracking times" OFF)
+if(SAVE_TIMES)
+  message(STATUS "Building with SAVE_TIMES")
+  add_definitions(-DSAVE_TIMES)
+endif()
+
 # Set build type
 IF(NOT CMAKE_BUILD_TYPE)
   SET(CMAKE_BUILD_TYPE Release)

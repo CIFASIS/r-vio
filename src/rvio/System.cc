@@ -94,11 +94,22 @@ System::System(const std::string& strSettingsFile)
 
     mPathPub = mSystemNode.advertise<nav_msgs::Path>("/rvio/trajectory", 1);
     mPosePub = mSystemNode.advertise<geometry_msgs::PoseStamped>("/rvio/posestamped", 1);
+
+#ifdef SAVE_TIMES
+    num_tracked_frames_ = 0;
+    f_track_times_.open("tracking_times_end.txt");
+    f_track_times_ << std::fixed;
+    f_track_times_ << std::setprecision(6);
+#endif
+
 }
 
 
 System::~System()
 {
+#ifdef SAVE_TIMES
+    f_track_times_.close();
+#endif
     delete mpTracker;
     delete mpUpdater;
     delete mpPreIntegrator;
@@ -342,6 +353,12 @@ void System::MonoVIO(const cv::Mat& im, const double& timestamp)
     Eigen::Vector4d qkG = QuatMul(qk,qG);
     Eigen::Vector3d pkG = Rk*(pG-pk);
     Eigen::Vector3d pGk = RG.transpose()*(pk-pG);
+
+#ifdef SAVE_TIMES
+    num_tracked_frames_++;
+    auto const t = std::chrono::system_clock::now().time_since_epoch().count();
+    f_track_times_ << num_tracked_frames_ << " " << t / 1e09 << std::endl;
+#endif
 
     if (mbRecordOutputs)
     {
